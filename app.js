@@ -16,7 +16,7 @@ app.get('/addtext', (req, res) => {
   res.render('add');
 });
 
-app.get('/paste', async (req, res) => {
+app.get('/paste:id', async (req, res) => {
   const { id } = req.query;
   try {
     const result = await client.query("SELECT text FROM document WHERE id = $1", [id]);
@@ -32,7 +32,8 @@ app.get('/paste/list', async (req, res) => {
     const document = await client.query("SELECT text, id FROM document");
     let variable = "";
     document.rows.forEach(row => {
-        variable += `${row.text.substring(0, 25)} <button onclick="window.location.href='/paste ?id=${row.id}'">READ THIS TEXT</button> <br>`;
+        variable += `${row.text.substring(0, 25)} 
+        <button onclick="window.location.href='/paste:id ?id=${row.id}'">READ THIS TEXT</button> <br>`;
     });
     res.send(variable);
   } catch (error) {
